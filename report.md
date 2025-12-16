@@ -38,7 +38,13 @@ Soutenance de 10 min + 5 min questions
 
 Questions pour le premier jet
 
+manque proofreading, citations, discussions : ma critique, observations + discussion sur la partie éthique
+faire fonctionner la bibliographie
+mettre une ou deux images
+
+
 - IEEE Keywords corrects?
+- problématique sous forme d'affirmation et pas de question ?
 
 ---
 
@@ -55,39 +61,83 @@ The strength of this model is not only the high fidelity of the audio generated,
 The article focuses on how the dualization of rhythm and timbre allows the model to give better synthetizations.
 The code is fully available on their github and webpage.
 
-// Problématique //
+
+Here, the authors are presenting a solution for high-quality audio generation model able to capture rhythmic information contained in audio gestures, which will be used to generate drum audio with controllable timbre.
 
 
 ## State of the Art - before publication
 
-// sur quoi ils se sont appuyés
+The progress of Artificial Intelligence lead to rapid innovation in all branches to which artificial intelligence can be applied to. Including AI-driven music generation. New models emerge, targetting different aspects of musical structure, with for instance lyrics transcription, instrument separation, and audio generation.
+The Rhythm In Anything can be contextualized in music generation, more specifically, audio-prompted drum generation.
 
-At the time of the publishing of their article,
+At the time of the publishing of this article, MelodyFlow by Lan et al. is the most recent model with a lot of influence in music generation models. It is a model released in 2024, which was made for music edition and generation. Based on text descriptions and an audio input, it generates an audio which is based on the audio input, with the modifications specified in the text prompt. This process of keeping close to the original audio is called flow matching.
+The music samples work in stereo, and the audio generated is returned directly in waveform latent space. The high quality of the generations as well as its controllability make MelodyFlow a very good model to which the authors can compare their own model.
+This model will be used with rhythm audio prompts, and the timbre specification will be text prompted.
+
+The authors are also referring to GrooVAE models. GrooVAE is a class of models which are designed to generate full drummkit expressive performances. The input here is a symbolic rhythm representation, more specifically a single voice MIDI file of drum patterns.
+GrooVAE models are able to reconstruct or generate an audio with micro-timings and velocity variations.
+The novelty brought by GrooVAE in 2019 is the mapping of symbolic rhythm to a full performance. This had a big influence in Music Information Retreival and music generation because it shows the importance of timings and dynamics.
+
+RAVE is an other model the authors took their inspiration from. RAVE stands for Real-time Audio Variational autoEncoder. It is a neural audio generative model from 2023, based on variational autoencoders which are used in AI models for generation. Variational autoencoders are pre-trained models which learn a probability distribution in the latent space, and are used to train other generative models.
+In RAVE, variational autoencoders allow the model to learn from the waveform in real-time.
+This makes RAVE a powerful model with fast generation while allowing for explicit latent control over timbre and quality.
+In this context of rhythm pattern generation, RAVE models have been used on tap-to-drum translation into audio.
+
+Beyond these core models, which served as main inspiration source for the authors, other audio generation models were proposed, which take rhythmic structure into account.
+However, the same constraints and problems arise in all those models.
+The previous propositions and grooVAE among them are not taking audio specification of timbre nor of rhythm. Most of them, including RAVE, need re-training for a different timbre or specifications not learnt in the training phase. The user needs to calibrate specifically for better transcriptions. Often, limitations are seen in the sound-gestures types and the litteral mapping of timbres. And finally, We only see dualization in the symbolic domain in models for music generation.
 
 ## Contribution
 
 The authors partition their contribution into three separate parts. First, the model, then the dualization task, and finally how the evaluations carried out show the performances of the model.
 
-The authors worked on TRIA, a
+We will first discuss here the creation of the dataset used, and the specifications for the experiments. Then we will talk about the core of the article: what TRIA is able to do. Finally we will detail the proposed methodology, and present the experiments and results.
 
 #### Datasets
 
+TRIA was trained and evaluated on audio rhythm prompts taken from two datasets: Amateur Vocal Percussion - AVP, and TapTamDrum, as well as MoisesDB dataset for timbre prompts.
 
+AVP is a dataset compiling beatboxing improvization recordings from 28 amateurs. The sound gestures expressed in beatboxing and gathered in AVP are varied and extensive. AVP's samples are also fully annotated.
 
+TapTamDrum is a dataset composed of rhythms imitations, reproduced by tapping on surfaces. This gives a temporal structure stronger than the timbral aspect.
 
+Fifty-six beatbox samples were taken from AVP dataset, as well as one thousand one hundread and sixteen tapping samples from TapTamDrum dataset, in order to form the rhythm prompt dataset for TRIA's training and evaluation.
+
+MoisesDB is a public dataset of professional quality music stems extracted from real, multitrack, recordings.
+TRIA's timbre prompts are small snippets taken from MoisesDB's drum tracks. The high quality of the MoisesDB samples gives TRIA a strong base for its generations.
+
+For the experimentation part.
+Since MelodyFlow is the method used for comparison, the authors had to adapt and translate the audio timbre prompt into a suitable text prompt. To do so, the autors used Chat-GPT 4.5 to generate fifty descriptions of drumkits. The text prompts were all inspected manually, and the authors also consulted with MelodyFlow's authors to ensure the reliability of the generated prompts.
+Excerpts form MoisesDB were also used in the experimentation phase, to compare the audio quality of TRIA's generations to real drum recordings.
 
 #### Tasks
 
+TRIA is designed to perform audio generation of drums.
+Given two audio prompts - one of the desired rhythmic pattern, the other a sample describing the desired drum timbre - TRIA generates a full drum recording that plays the requested rhythm in the given timbre.
+The model is trained as a masked transformer that predicts missing audio tokens conditioned on both rhythm and timbre information, enabling it to translate arbitrary rhythmic sound gestures into high-fidelity drum audio in a zero-shot manner.
+
 #### Methodology
-// expliquer modele transformer
-// tokenization
-// pas encoder decoder
+TRIA is a transformer-based masked language model.
+A transformer-based model is a neural network which relies on self-attention mechanisms that allow the network to model long-range dependencies within a sequence by relating each element to all others in parallel.
+TRIA is also a masked model, which trains the model to predict missing tokens.
+Tokenization is a process of breaking down input data into a sequence of tokens that the model can process.
+Here the input is an audio file, thus the tokens are short sequences of audio. At training time, some tokens are randomly hidden, and the model has to correctly retreive the audio token using context from unmasked tokens.
+Before tokenization, audio is buffered into segments of fixed length. Audio is then encoded using a Differentiable Audio Codec (DAC). This buffering ensures temporal continuity and allows the model to capture rhythmic patterns across longer time spans.
 
-// bien expliquer dualization
-// donc expliquer les différentes versions
+The second main part of this work is the dualization, or more globally, the splitting of the rhythm prompt's spectrogram into several parts.
+The splitting works as follows:
+First the authors acquire the spectrogram from the audio rhythm prompt.
+Then, the authors look at the amplitude in frequencies, and determine where the splitting must happen. The energy needs to be balanced across the bands to be able to distinguish between low and high frequencies and better capture rhythmic information.
+Finally, for each band created, the energy is summed to extract rhythmic activity.
 
+The authors tried different versions, with a different number of bands to try and capture rhythm more or less precisely, and see a difference in the model's performances.
+The aim is to encode well the rhythmic structure given in input and avoid leaking timbre information.
+This results in the creation of different versions of TRIA:
+TRIA 1-band, where no separation is performed.
+TRIA 2-band, which will be the reference version, is adaptative and splits the spectrum in two bands.
+TRIA 2-band non-adaptative splits the spectrum in the middle, there is no adaptative alignment in this version so it is less effective in most cases.
+TRIA 3-band and 4-band are splitting the spectrogram into respectively three and four.
 
-// VERIFY DESC OF MF
 The state of the art model used is MelodyFlow, which takes in input an audio prompt of the desired rhythm - sond gestures just like for TRIA, and a text prompt of the desired timbre.
 MelodyFlow is a one billion parameter transformer model. It was trained both on public and private data, for twenty thousand hours of music in total.
 There is a parameter that controlls how much the generated audio keeps the rhythmic structure of the given rhythm prompt. This target flow step is a parameter that ranges from 0.0 to 1.0, corresponding respectively to full noising and no noising. In other words, values closer to 0.0 will lower the influence of the rhythm prompt in the output audio
@@ -122,25 +172,27 @@ Finally, being able to have generations well liked by human listeners but, most 
 
 **Objective evaluations**
 
-The objective evaluations are conducted on three criteria: adherence to the rhythm prompt, adherence to the timbre prompt, and audio quality of the synthetizations.
+The objective evaluations are conducted according to three criteria: adherence to the rhythm prompt, adherence to the timbre prompt, and audio quality of the synthesized outputs.
 
-The evaluation of the adherence to the rhythm prompt is about measuring how well the rhytmic structure of the rhythm prompt was preserved in the associated generation.
+The evaluation of the adherence to the rhythm prompt aims to measure how well the rhytmic structure of the rhythm prompt was preserved in the associated generation.
 Evaluations were carried out on all variants of TRIA and MelodyFlow, and on the random anchor.
-The metric used here is the F1 score, to measure the correspondance between transcription - the audio generated by the model, and ground truth - the prompt given to the model in input supplemented with human annotations about the kick, snare, and hi-hat in the audio.
-// EXPLAIN F1 SCORE AND HOW THEY RETRIEVED IT //
-A higher F1 score shows for tighter correspondance between the two audios.
+The metric used here is the F1 score, to measure the correspondance between transcription - the audio generated by the model, and ground truth - the prompt given to the model in input, supplemented with human annotations about the kick, snare, and hi-hat in the audio.
+To compute the F1 score, both the generated audio and the rhythm prompt are transcribed into discrete drum event sequences. For each of the sequences, the precision measures the proportion of correctly generated events among all predicted events, while recall measures the proportion of ground-truth events that are successfully repreduced in the generated output. The F1 score is the harmonic mean of precision and recall. A higher F1 score indicates a tighter correspondence between the rhythmic structure of the prompt and that of the generated audio.
 
 // INSERER FIGURE
 
-// timbre adh
+Adherence to the timbre prompt evaluates how well the instrumental characteristics from the timbre audio prompt are preserved in the synthesized output.
+In TRIA, timbre prompts consist of short drum audio excerpts drawn from MoisesDB, and the evaluation assesses whether the generated audio reflects the spectral and perceptual qualities of the provided timbre example.
+Unlike rhythm adherence, timbre similarity is evaluated using audio embedding distances. The generated audio is compared to the timbre prompt in a learned feature space designed to capture perceptual similarity.
 
 // audio quality
-Finally, in order to measure the realism of the synthetizations from TRIA compared to random excerpts from MoisesDataBase.
-Here the authors decided against comparing TRIA's generations againds MelodyFlows since MelodyFlows uses text prompt describing the timbre prompt.
-The metric used here is Kernel Audio Distance, or KAD, which is
-// EXPLAIN KAD
-The authors used two types of KAD for the evalutation: KAD-PANN, which ...
-And also KAD-ClapLaionMusic, which ...
+Finally, the realism and perceptual quality of the synthetized audio are evaluated by comparing TRIA’s outputs to random drum excerpts from MoisesDB, which serve as a reference distribution of real drum sounds.
+Here the authors decided to avoid comparing TRIA's generations against MelodyFlows since MelodyFlows uses text prompt describing the timbre prompt.
+The metric used here is Kernel Audio Distance, or KAD. KAD measures the distance between two distributions of audio samples by computing a Maximum Mean Discrepancy (MMD) between their embeddings in a learned feature space.
+Lower KAD values indicate that the generated audio is closer to the reference distribution and therefore more realistic.
+The authors used two types of KAD for the evalutation: KAD-PANN, relies on embessings extracted from a Pretrained Audio Neural Network model, emphasizing acoustic and timbral characteristics.
+And also KAD-ClapLaionMusic, which uses embeddings from a CLAP model trained on the LAION-Music dataset. It captures higher-level perceptual and musical attributes, from a human-like point of view.
+The authors used both methods to assess audio quality from complementary perceptual perspectives.
 
 
 The results of the rhythmic evaluation show TRIA 2-band is performing significantly better than MelodyFlow for beatboxing. The kick and snare placement is better matching the audio prompt.
@@ -149,17 +201,16 @@ TRIA 1-band and 2-band non adaptive are overtaken by TRIA 2-band.
 Whereas 3-band and 4-band versions of TRIA only show slightly better results in the kick placement, and not so much improvement for the snare placement.
 Here, the authors conclude that in order to capture the rhytmic structure of an audio, splitting the spectrogram in two may be efficient enough, to get a synthetization really close to the rhythm audio prompted.
 
-// results timbre prompt
+Then the results of the timbre evaluation are demonstrating that TRIA's generations give a lower spectral correlation with the timbre prompt, and a higher correlation with the timbre prompt.
+whereas MelodyFlow's generations show a higher spectral correlation with the rhythm prompt, which attests for timbre leakage.
+The timbre evaluation highlights TRIA’s ability to recombine rhythm and timbre in a zero-shot manner. This is not available in text-guided models such as MelodyFlow.
 
-// results audio quality
-
-The authors finish by concluding that TRIA is outperforming MelodyFlow since TRIA's generations are more precise and close to the prompted rhythm and timbre, thanks to the inputs being given as audios, and the dualization of the spectrograms. These are TRIA's strongest advantages.
-
-
-
-
+The authors finish by concluding that TRIA is outperforming MelodyFlow since TRIA's generations are more precise and close to the prompted rhythm and timbre, thanks to the inputs being given as audios, and the dualization of the spectrograms. These, combined with TRIA's zero-shot timbre specification, are TRIA's strongest advantages.
 
 ## Discussion
+
+// critique
+// parler de la section 7 ethics et tout
 
 ## State of the Art - after publication
 
