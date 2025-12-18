@@ -212,7 +212,15 @@ The authors finish by concluding that TRIA is outperforming MelodyFlow since TRI
 // critique
 // parler de la section 7 ethics et tout
 
+I find this model contributes well to Music Information Retrieval - MIR. It allows for a rhythm and timbre specification through an audio, which makes the prompting for synthetization easier and more precise. TRIA can perform in a zero-shot manner, which means there is no re-training needed when generating from a new rhythm or timbre prompt. The authors focused on the dualization of the spectrogram, so from the audio-prompted rhythms. This spectrogram dualizaion makes capturing rhythmic cues more accurate.
+From a drummer's point of view, I appreciate the effort the authors put in assessing audio quality. Compared to other models, I find TRIA more precise. The kick, snare and hi-hat placements are well determined by the model and correspond well to the original rhythm.
+The authors present here a real improvement from the reference model MelodyFlow.
+With respect to ISMIR's submission requirements, the participants are encouraged to add an optional Ethics Statement section. Here, O'Reilly et al. are adding a few words on ethics about the impact of generative music models and the payment of the evaluators who participated to the evaluation phase. The authors emphasize on the risks of generative AI for artists, stating that they are all both musicians and AI researchers.
+
+
 ## State of the Art - after publication
 
 // What has been done since the publication
+
+// FOLLOWING WORK FROM PATRICK OREILLY
 
