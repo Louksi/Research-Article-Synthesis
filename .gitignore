@@ -3,4 +3,6 @@
 !*.pdf
 !*.tex
 !*.md
-!*.bib
+!images/
+!*.png
+
