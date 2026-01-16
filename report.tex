@@ -156,16 +156,16 @@
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
 
-\title{The Rhythm In Anything \\ audio-prompted drums generation with masked language modeling}
+\title{The Rhythm In Anything \\ audio-prompted drums generation with masked language modeling \\
+  [1ex] \large by Patrick O’Reilly, Julia Barnett, Hugo Flores Garcia, Annie Chu, \\
+  Nathan Pruyne, Prem Seetharaman, Bryan Pardo}
 
-\author{Patrick O’Reilly, Julia Barnett, Hugo Flores Garcia,
-Annie Chu, \\
-Nathan Pruyne, Prem Seetharaman, Bryan Pardo}% <-this % stops a space}
+\author{Gabriel Tardiou}% <-this % stops a space}
 
 \IEEEtitleabstractindextext{%
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-Music Information Retrieval, Audio Generation, Drum Synthesis, Artificial Intelligence
+ Music Information Retrieval, Audio Generation, Drum Synthesis, Artificial Intelligence
 \end{IEEEkeywords}}
 
 
@@ -191,12 +191,11 @@ The code is fully available on their GitHub and webpage.
 Here, the authors are presenting a solution for a high-quality audio generation model able to capture rhythmic information contained in audio gestures, which will be used to generate drum audio with controllable timbre.
 
 \section{State of the Art - Before Publication}\label{sec:context}
-The progress of artificial intelligence leads to rapid innovation in all branches to which artificial intelligence can be applied.
-Including AI-driven music generation.
+The progress of artificial intelligence leads to rapid innovation in all branches to which artificial intelligence can be applied, including AI-driven music generation.
 New models emerge, targeting different aspects of musical structure, with, for instance, lyrics transcription, instrument separation, and audio generation.
 The Rhythm In Anything~\cite{oreilly2025tria} can be contextualized in music generation, more specifically, audio-prompted drum generation.
 
-At the time of the publishing of this article, MelodyFlow by Lan et al.~\cite{lan2024melodyflow} is the most recent model with a lot of influence in music generation models.
+At the time of publishing of this article, MelodyFlow by Lan et al.~\cite{lan2024melodyflow} is the most recent model with a lot of influence in music generation models.
 It is a model released in 2024, which was made for music edition and generation.
 Based on text descriptions and an audio input, it generates an audio that is based on the audio input, with the modifications specified in the text prompt.
 This process of keeping close to the original audio is called flow matching.
@@ -209,7 +208,7 @@ GrooVAE is a class of models that are designed to generate full drum kit express
 The input here is a symbolic rhythm representation, more specifically a single-voice MIDI file of drum patterns.
 GrooVAE models are able to reconstruct or generate audio with micro-timings and velocity variations.
 The novelty brought by GrooVAE in 2019 is the mapping of symbolic rhythm to a full performance.
-This had a big influence on Music Information Retreival and music generation because it shows the importance of timings and dynamics.
+This had a big influence on Music Information Retrieval and music generation because it shows the importance of timings and dynamics.
 
 RAVE~\cite{caillon2021rave} is another model the authors took their inspiration from.
 RAVE stands for Real-time Audio Variational autoencoder.
@@ -229,7 +228,7 @@ And finally, we only see dualization in the symbolic domain in models for music 
 
 \section{Contribution}\label{sec:contribution}
 
-The authors partition their contribution into three separate parts.
+The authors divide their contribution into three separate parts.
 First, the model; then the dualization task; and finally, how the evaluations carried out show the performances of the model.
 
 We will first discuss here the creation of the dataset used and the specifications for the experiments.
@@ -285,14 +284,14 @@ The energy needs to be balanced across the bands to be able to distinguish betwe
 Finally, for each band created, the energy is summed to extract rhythmic activity.
 
 The authors tried different versions with a different number of bands to try and capture rhythm more or less precisely and see a difference in the model's performances.
-The aim is to encode well the rhythmic structure given in input and avoid leaking timbre information.
+The aim is to encode correctly the rhythmic structure given in input and avoid leaking timbre information.
 This results in the creation of different versions of TRIA:
 TRIA 1-band, where no separation is performed.
 TRIA 2-band, which will be the reference version, is adaptive and splits the spectrum into two bands.
 TRIA 2-band non-adaptive splits the spectrum in the middle, there is no adaptive alignment in this version, so it is less effective in most cases.
 TRIA 3-band and 4-band are splitting the spectrogram into three and four.
 
-The state-of-the-art model used is MelodyFlow, which takes as input an audio prompt of the desired rhythm - sond gestures just like for TRIA, and a text prompt of the desired timbre.
+The state-of-the-art model used is MelodyFlow, which takes as input an audio prompt of the desired rhythm - sound gestures just like for TRIA, and a text prompt of the desired timbre.
 MelodyFlow is a one billion parameter transformer model.
 It was trained both on public and private data, for twenty thousand hours of music in total.
 There is a parameter that controls how much the generated audio keeps the rhythmic structure of the given rhythm prompt.
@@ -309,12 +308,12 @@ They wanted to measure the quality of the synthesizations, as well as how close 
 \subsubsection{Subjective Evaluation}
 
 The subjective evaluation was carried out in order to verify how musically pleasing the generated audios were and also how the synthesizations from TRIA compared to MelodyFlow's generations and the random excerpts.
-For comparison purposes, in these evaluations the authors compare audio generated from the model TRIA 2-band with random audios extracted from the dataset MoisesDB and also with audio generated from the model MelodyFlow 0.2.
+For comparison purposes, in these evaluations, the authors compare audio generated from the model TRIA 2-band with random audios extracted from the dataset MoisesDB and also with audio generated from the model MelodyFlow 0.2.
 Evaluators here are humans, recruited through the platform Prolific.
 The evaluations were done through ReSEval, which stands for Reproducible Subjective Evaluation.
 Which is a framework used for building subjective evaluations.
 In order to have a homogeneous tester base, the people recruited had to pass a listening test.
-Out of the hundred and twenty persons originally recruited, a hundred and sixteen passed the listening test and went on with the evaluation of the audios.
+Out of the hundred and twenty people originally recruited, a hundred and sixteen passed the listening test and went on with the evaluation of the audios.
 For the subjective evaluation, listeners rated audio from eighty sets.
 A set is composed of an audio rhythm prompt, the associated generation from TRIA 2-band and from MelodyFlow 0.2, and a drum extract randomly taken from MoisesDB.
 The eighty generations were made with ten rhythm prompts: five with tapping sounds and five with beatboxing audio, on eight different audio timbre prompts.
@@ -376,15 +375,15 @@ These, combined with TRIA's zero-shot timbre specification, are TRIA's strongest
 
 \section{Discussion}\label{sec:discussion}
 
-We find this model contributes well to Music Information Retrieval - MIR.
+We find this model contributes significantly to Music Information Retrieval - MIR.
 It allows for a rhythm and timbre specification through an audio, which makes the prompting for synthesization easier and more precise.
 TRIA can perform in a zero-shot manner, which means there is no retraining needed when generating from a new rhythm or timbre prompt.
 The authors focused on the dualization of the spectrogram, so from the audio-prompted rhythms.
 This spectrogram dualization makes capturing rhythmic cues more accurate.
 
-From a drummer's point of view, we appreciate the effort the authors put in assessing audio quality.
-Compared to other models, we find TRIA more precise.
-The kick, snare, and hi-hat placements are well determined by the model and correspond well to the original rhythm.
+From a drummer's point of view, I appreciate the effort the authors put in assessing audio quality.
+Compared to other models, I find TRIA more precise.
+The kick, snare, and hi-hat placements are well determined by the model and well correspond to the original rhythm.
 The authors present here a real improvement from the reference model MelodyFlow.
 
 With respect to ISMIR's submission requirements, the participants are encouraged to add an optional Ethics Statement section.
@@ -411,11 +410,11 @@ J.~Gillick, A.~Roberts, J.~Engel, D.~Eck, and D.~Bamman, ``Learning to groove wi
 \bibitem{caillon2021rave}
 A.~Caillon and P.~Esling, ``Rave: A variational autoencoder for fast and high-quality neural audio synthesis,'' \emph{arXiv preprint arXiv:2111.05011}, 2021.
 
-\bibitem{haki2023taptamdrum}
-B.~Haki, B.~Kotowski, C.~Lee, and S.~Jorda, ``Taptamdrum: A dataset for dualized drum patterns,'' in \emph{Proceedings of the 24th International Society for Music Information Retrieval Conference}, ISMIR, 2023.
-
 \bibitem{delgado2019avp}
 A.~Delgado, S.~McDonald, N.~Xu, and M.~Sandler, ``A new dataset for amateur vocal percussion analysis,'' in \emph{Proceedings of the 14th International Audio Mostly Conference: A Journey in Sound}, ser. AM '19.\hskip 1em plus 0.5em minus 0.4em\relax New York, NY, USA: Association for Computing Machinery, 2019, pp. 17--23. [Online]. Available: https://doi.org/10.1145/3356590.3356844
+
+\bibitem{haki2023taptamdrum}
+B.~Haki, B.~Kotowski, C.~Lee, and S.~Jorda, ``Taptamdrum: A dataset for dualized drum patterns,'' in \emph{Proceedings of the 24th International Society for Music Information Retrieval Conference}, ISMIR, 2023.
 
 \end{thebibliography}
 
