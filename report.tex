@@ -104,7 +104,7 @@
 % *** GRAPHICS RELATED PACKAGES ***
 %
 \ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
+  \usepackage[pdftex]{graphicx}
   % declare the path(s) where your graphic files are
   % \graphicspath{{../pdf/}{../jpeg/}}
   % and their extensions so you won't have to specify these with
@@ -114,7 +114,7 @@
   % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
   % will default to the driver specified in the system graphics.cfg if no
   % driver is specified.
-  % \usepackage[dvips]{graphicx}
+  \usepackage[dvips]{graphicx}
   % declare the path(s) where your graphic files are
   % \graphicspath{{../eps/}}
   % and their extensions so you won't have to specify these with
@@ -157,16 +157,16 @@
 % Do not put math or special symbols in the title.
 
 \title{The Rhythm In Anything \\ audio-prompted drums generation with masked language modeling \\
-  [1ex] \large by Patrick O’Reilly, Julia Barnett, Hugo Flores Garcia, Annie Chu, \\
-  Nathan Pruyne, Prem Seetharaman, Bryan Pardo}
+[1ex] \large by Patrick O’Reilly, Julia Barnett, Hugo Flores Garcia, Annie Chu, \\
+Nathan Pruyne, Prem Seetharaman, Bryan Pardo}
 
-\author{Gabriel Tardiou}% <-this % stops a space}
+\author{Synthesis by Gabriel Tardiou}% <-this % stops a space}
 
 \IEEEtitleabstractindextext{%
-% Note that keywords are not normally used for peerreview papers.
-\begin{IEEEkeywords}
- Music Information Retrieval, Audio Generation, Drum Synthesis, Artificial Intelligence
-\end{IEEEkeywords}}
+  % Note that keywords are not normally used for peerreview papers.
+  \begin{IEEEkeywords}
+    Music Information Retrieval, Audio Generation, Drum Synthesis, Artificial Intelligence, Transformer, Masked Language Modeling
+  \end{IEEEkeywords}}
 
 
 % make the title area
@@ -181,11 +181,13 @@
 \section{Introduction}\label{sec:introduction}
 
 The Rhythm In Anything, or TRIA, is an artificial intelligence model trained to generate drums with audio-prompted rhythm and timbre.
-The work from Patrick O'Reilly et al. falls within the Music Information Retrieval discipline, which is the science of retrieving information from music.
+The work from Patrick O'Reilly et al. falls within the Music Information Retrieval discipline, which is the science of processing music information. It was presented at ISMIR 2025 conference.
 The novelty here is the high-fidelity drum recordings, generated from a rhythm and a timbre audio.
 The model takes simple rhythm patterns, an audio of some beatboxing or tapping sounds, and, as drumkit timbres, it only takes an example recording.
+Many people naturally express rhythms by beatboxing or tapping on a table, practices that are both intuitive and extremely popular.
+Being able to turn these simple audio gestures into realistic drum sounds could make TRIA a valuable tool for music creation, notation, and composition.
 The strength of this model is not only the high fidelity of the audio generated but also that it works even with timbres it was not trained on.
-The article focuses on how the dualization of rhythm and timbre allows the model to give better synthesizations.
+The article focuses on how the dualization of rhythm and timbre allows the model to give better synthesizations. This means TRIA is able to separate what rhythm is played from how it sounds.
 The code is fully available on their GitHub and webpage.
 
 Here, the authors are presenting a solution for a high-quality audio generation model able to capture rhythmic information contained in audio gestures, which will be used to generate drum audio with controllable timbre.
@@ -234,6 +236,15 @@ First, the model; then the dualization task; and finally, how the evaluations ca
 We will first discuss here the creation of the dataset used and the specifications for the experiments.
 Then we will talk about the core of the article: what TRIA is able to do.
 Finally, we will detail the proposed methodology and present the experiments and results.
+
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{images/output_example.png}
+  \caption{Example of TRIA combining rhythm and timbre prompts, from https://therhythminanything.github.io/.}
+  \label{fig:tria-example}
+\end{figure}
+
 
 \subsection{Datasets}
 
@@ -372,6 +383,7 @@ This is not available in text-guided models such as MelodyFlow.
 
 The authors finish by concluding that TRIA is outperforming MelodyFlow since TRIA's generations are more precise and close to the prompted rhythm and timbre, thanks to the inputs being given as audios and the dualization of the spectrograms.
 These, combined with TRIA's zero-shot timbre specification, are TRIA's strongest advantages.
+The example shown in Figure~\ref{fig:tria-example} illustrates how TRIA combines a rhythm prompt and a separate timbre prompt to generate a new drum sound, highlighting its ability to disentangle rhythmic structure from sound texture.
 
 \section{Discussion}\label{sec:discussion}
 
@@ -380,6 +392,7 @@ It allows for a rhythm and timbre specification through an audio, which makes th
 TRIA can perform in a zero-shot manner, which means there is no retraining needed when generating from a new rhythm or timbre prompt.
 The authors focused on the dualization of the spectrogram, so from the audio-prompted rhythms.
 This spectrogram dualization makes capturing rhythmic cues more accurate.
+For composers or musicians who want to create drum tracks quickly to not lose their inspiration, this model is a great tool to have, very easy to use and it produces great results.
 
 From a drummer's point of view, I appreciate the effort the authors put in assessing audio quality.
 Compared to other models, I find TRIA more precise.
@@ -395,26 +408,26 @@ Since the publication of \textit{The Rhythm In Anything: audio-prompted drums ge
 
 \begin{thebibliography}{1}
 
-\bibitem{oreilly2025tria}
-P.~O'Reilly, J.~Barnett, H.~F.~Garcia, A.~Chu, N.~Pruyne, P.~Seetharaman, and B.~Pardo, ``The Rhythm In Anything: Audio-Prompted Drums Generation with Masked Language Modeling,'' in \emph{Proc. of the 26th Int. Society for Music Information Retrieval Conf.}, Daejeon, South Korea, 2025.
+  \bibitem{oreilly2025tria}
+  P.~O'Reilly, J.~Barnett, H.~F.~Garcia, A.~Chu, N.~Pruyne, P.~Seetharaman, and B.~Pardo, ``The Rhythm In Anything: Audio-Prompted Drums Generation with Masked Language Modeling,'' in \emph{Proc. of the 26th Int. Society for Music Information Retrieval Conf.}, Daejeon, South Korea, 2025.
 
-\bibitem{lan2024melodyflow}
-G.~L.~Lan, B.~Shi, Z.~Ni, S.~Srinivasan, A.~Kumar, B.~Ellis, D.~Kant, V.~Nagaraja, E.~Chang, W.-N.~Hsu, Y.~Shi, and V.~Chandra, ``High fidelity text-guided music editing via single-stage flow matching,'' \emph{arXiv preprint arXiv:2407.03648}, 2024.
+  \bibitem{lan2024melodyflow}
+  G.~L.~Lan, B.~Shi, Z.~Ni, S.~Srinivasan, A.~Kumar, B.~Ellis, D.~Kant, V.~Nagaraja, E.~Chang, W.-N.~Hsu, Y.~Shi, and V.~Chandra, ``High fidelity text-guided music editing via single-stage flow matching,'' \emph{arXiv preprint arXiv:2407.03648}, 2024.
 
-\bibitem{pereira2023moisesdb}
-I.~Pereira, F.~Araújo, F.~Korzeniowski, and R.~Vogl, ``Moisesdb: A dataset for source separation beyond 4-stems,'' in \emph{Conference of the International Society for Music Information Retrieval (ISMIR)}, 2023.
+  \bibitem{pereira2023moisesdb}
+  I.~Pereira, F.~Araújo, F.~Korzeniowski, and R.~Vogl, ``Moisesdb: A dataset for source separation beyond 4-stems,'' in \emph{Conference of the International Society for Music Information Retrieval (ISMIR)}, 2023.
 
-\bibitem{gillick2019groovae}
-J.~Gillick, A.~Roberts, J.~Engel, D.~Eck, and D.~Bamman, ``Learning to groove with inverse sequence transformations,'' in \emph{ICML}, 2019.
+  \bibitem{gillick2019groovae}
+  J.~Gillick, A.~Roberts, J.~Engel, D.~Eck, and D.~Bamman, ``Learning to groove with inverse sequence transformations,'' in \emph{ICML}, 2019.
 
-\bibitem{caillon2021rave}
-A.~Caillon and P.~Esling, ``Rave: A variational autoencoder for fast and high-quality neural audio synthesis,'' \emph{arXiv preprint arXiv:2111.05011}, 2021.
+  \bibitem{caillon2021rave}
+  A.~Caillon and P.~Esling, ``Rave: A variational autoencoder for fast and high-quality neural audio synthesis,'' \emph{arXiv preprint arXiv:2111.05011}, 2021.
 
-\bibitem{delgado2019avp}
-A.~Delgado, S.~McDonald, N.~Xu, and M.~Sandler, ``A new dataset for amateur vocal percussion analysis,'' in \emph{Proceedings of the 14th International Audio Mostly Conference: A Journey in Sound}, ser. AM '19.\hskip 1em plus 0.5em minus 0.4em\relax New York, NY, USA: Association for Computing Machinery, 2019, pp. 17--23. [Online]. Available: https://doi.org/10.1145/3356590.3356844
+  \bibitem{delgado2019avp}
+  A.~Delgado, S.~McDonald, N.~Xu, and M.~Sandler, ``A new dataset for amateur vocal percussion analysis,'' in \emph{Proceedings of the 14th International Audio Mostly Conference: A Journey in Sound}, ser. AM '19.\hskip 1em plus 0.5em minus 0.4em\relax New York, NY, USA: Association for Computing Machinery, 2019, pp. 17--23. [Online]. Available: https://doi.org/10.1145/3356590.3356844
 
-\bibitem{haki2023taptamdrum}
-B.~Haki, B.~Kotowski, C.~Lee, and S.~Jorda, ``Taptamdrum: A dataset for dualized drum patterns,'' in \emph{Proceedings of the 24th International Society for Music Information Retrieval Conference}, ISMIR, 2023.
+  \bibitem{haki2023taptamdrum}
+  B.~Haki, B.~Kotowski, C.~Lee, and S.~Jorda, ``Taptamdrum: A dataset for dualized drum patterns,'' in \emph{Proceedings of the 24th International Society for Music Information Retrieval Conference}, ISMIR, 2023.
 
 \end{thebibliography}
 
