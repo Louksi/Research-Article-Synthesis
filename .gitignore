@@ -1,8 +1,9 @@
 *
 !.gitignore
+!files/
+!images/
 !*.pdf
 !*.tex
 !*.md
-!images/
 !*.png
 
